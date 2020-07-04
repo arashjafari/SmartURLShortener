@@ -17,3 +17,5 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 Route::get('/', 'MainController@showHomePage')->name('homepage');
+
+Route::post('create', 'LinkController@create' )->name('create');
