@@ -87,7 +87,7 @@ class LinkController extends Controller
         do
         {
             $rndCustom = $this->generateRandomCustomUrl();
-        }while(Link::where('custom', $rndCustom)->count() != 0);
+        }while(Link::whereCustom($rndCustom)->whereActive(true)->count() != 0);
 
         return $rndCustom;
     }
