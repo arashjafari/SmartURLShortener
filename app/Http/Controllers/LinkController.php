@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use App\Link; 
+use Illuminate\Support\Facades\Redirect;
+use App\Link;
+use Carbon\Carbon;
 
 class LinkController extends Controller
 {
@@ -103,6 +105,54 @@ class LinkController extends Controller
        $link =  Str::finish($app_url, '/') . $custom;
 
        return $link;
+    }
+
+    /**
+     * Redirect to main link by short link
+     * 
+     * @param Request $request
+     * @param string $short
+     * @return \Illuminate\Http\RedirectResponse
+     * 
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function short2Long(Request $request, $short)
+    {
+        $link = Link::whereCustom($short)->whereActive(true)->first();
+        if(!$link)
+            abort(404);
+
+        
+        if($link->expire_at != null)
+        {
+            $now = Carbon::now(); 
+            $expireAt = Carbon::parse($link->expire_at);
+            
+            if($now->greaterThan($expireAt))
+            {
+                $link->active = false;
+                $link->save();
+                abort(404);
+            }
+
+        }
+        
+        if($link->total_uses != null)
+        { 
+            $link->used += 1;
+            $link->save();
+
+            if($link->used > $link->total_uses)
+            {
+                $link->active = false;
+                $link->save();
+                abort(404);
+            }
+
+        } 
+
+        return Redirect::to($link->url, 301);
     }
 
 }
