@@ -50,6 +50,7 @@ class LinkController extends Controller
         $link->total_uses = $totalUses; 
         $link->used = 0;
         $link->expire_at = $expiredDate;
+        $link->active = true;
         $link->save();
 
         $shortLink = $this->getShortLink($link->custom);
