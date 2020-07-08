@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
+use Jenssegers\Agent\Agent;
 use App\Link;
+use App\LinkStats;
 use Carbon\Carbon;
 
 class LinkController extends Controller
@@ -135,8 +137,7 @@ class LinkController extends Controller
                 $link->active = false;
                 $link->save();
                 abort(404);
-            }
-
+            } 
         }
         
         if($link->total_uses != null)
@@ -149,11 +150,36 @@ class LinkController extends Controller
                 $link->active = false;
                 $link->save();
                 abort(404);
-            }
+            } 
+        }  
 
-        } 
-
+        $this->addLinkStats($link->id, $request->ip()); 
+        
         return Redirect::to($link->url, 301);
+    }
+
+    /**
+     * Add link stats
+     * 
+     * @param int $linkId
+     * @param string $ip
+     * @return void
+     * 
+     */
+    private function addLinkStats($linkId, $ip)
+    {
+        $agent = new Agent; 
+        $inkStats = new LinkStats;
+        $inkStats->user_id = getCurrentUserId();
+        $inkStats->ip = $ip; 
+        $inkStats->link_id = $linkId; 
+        $inkStats->is_robot = $agent->isRobot();
+        $inkStats->is_phone = $agent->isPhone(); 
+        $inkStats->is_desktop = $agent->isDesktop();
+        $inkStats->device_nmae = $agent->device();
+        $inkStats->platform_name = $agent->platform();
+        $inkStats->browser_name = $agent->browser();
+        $inkStats->save();
     }
 
 }
