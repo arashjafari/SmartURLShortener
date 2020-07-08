@@ -2,17 +2,25 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
+use App\Link;
+use Artisan;
 
 class LinkTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function testExample()
+    use DatabaseTransactions;
+
+    public function setUp(): void
     {
-        $this->assertTrue(true);
+        parent::setUp(); 
+        Artisan::call('migrate:fresh');
+    }
+      
+    public function test_add_link()
+    {   
+        $link = factory(Link::class, 1)->make();
+
+        $this->assertCount(1, $link); 
     }
 }
