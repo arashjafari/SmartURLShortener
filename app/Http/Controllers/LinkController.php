@@ -141,16 +141,16 @@ class LinkController extends Controller
         }
         
         if($link->total_uses != null)
-        { 
-            $link->used += 1;
-            $link->save();
-
-            if($link->used > $link->total_uses)
+        {  
+            if($link->used >= $link->total_uses)
             {
                 $link->active = false;
                 $link->save();
                 abort(404);
             } 
+            
+            $link->used += 1;
+            $link->save();
         }  
 
         $this->addLinkStats($link->id, $request->ip()); 
