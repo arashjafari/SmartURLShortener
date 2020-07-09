@@ -22,6 +22,7 @@
                             <th scope="col">{{ __('Expire date') }}</th>
                             <th scope="col">{{ __('Click limitation') }}</th>
                             <th scope="col">{{ __('Total clicks') }}</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -32,6 +33,9 @@
                             <td>{{ $item->expire_at }}</td>  
                             <td>{{ is_null($item->total_uses) ? '~' : $item->used . '/' . $item->total_uses }}</td>                             
                             <td>{{ $item->used }}</td> 
+                            <td>
+                                <a href="{{ route('user.stats', ['id' => $item->id ]) }}">{{ __('Stats') }}</a>
+                            </td>
                         </tr>
                         @endforeach 
                         </tbody>
