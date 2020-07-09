@@ -2,9 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\WithFaker; 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseTransactions; 
 use Tests\TestCase;
 use App\User;
 
