@@ -2,6 +2,9 @@
 
 Smart URL shortening tools in Laravel
 
+## Screenshot
+![Image of SmartURLShortener](screenshot.png)
+
 ### Features
 * URL Shortener.
 * Customized short URLs.
