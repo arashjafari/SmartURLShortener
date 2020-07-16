@@ -1,3 +1,5 @@
+![Laravel](https://github.com/arashjafari/SmartURLShortener/workflows/Laravel/badge.svg)
+
 ## SmartURLShortener
 
 Smart URL shortening tools in Laravel
