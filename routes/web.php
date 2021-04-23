@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\MainController;
+use App\Http\Controllers\LinkController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +19,12 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 
-Route::get('/', 'MainController@showHomePage')->name('homepage');
-Route::post('create', 'LinkController@create' )->name('create');
+Route::get('/', [MainController::class, 'showHomePage'])->name('homepage');
+Route::post('create', [LinkController::class, 'create'] )->name('create');
 
 Route::name('user.')->prefix('user')->middleware('auth')->group(function () {
-    Route::get('dashboard', 'UserController@showDashboardPage')->name('dashboard');
-    Route::get('{id}/stats', 'UserController@showLinkStatsPage')->name('stats');
+    Route::get('dashboard', [UserController::class, 'showDashboardPage'])->name('dashboard');
+    Route::get('{id}/stats', [UserController::class, 'showLinkStatsPage'])->name('stats');
 });
 
-Route::get('{short}', 'LinkController@short2Long')->where('short', '[A-Za-z0-9\-]{3,}');
+Route::get('{short}', [LinkController::class, 'short2Long'])->where('short', '[A-Za-z0-9\-]{3,}');
